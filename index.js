@@ -1,45 +1,23 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
+const path = require("path");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
-const path = require("path");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const databasePath = path.join(__dirname, "goodreads.db");
-
-const cors = require("cors");
-const bp = require("body-parser");
-
 const app = express();
-
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: "*",
-  })
-);
-
-app.use(
-  cors({
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-  })
-);
-
-app.use(bp.json());
-app.use(bp.urlencoded({ extended: true }));
-
-app.use(express.json());
+const dbPath = path.join(__dirname, "goodreads.db");
 
 let db = null;
 
 const initializeDBAndServer = async () => {
   try {
     db = await open({
-      filename: databasePath,
+      filename: dbPath,
       driver: sqlite3.Database,
     });
-    app.listen(3004, () => {
-      console.log("Server Running at http://localhost:3004/");
+    app.listen(3007, () => {
+      console.log("Server Running at http://localhost:3000/");
     });
   } catch (e) {
     console.log(`DB Error: ${e.message}`);
